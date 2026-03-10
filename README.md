@@ -69,4 +69,4 @@ The findings from this exhaustive grid search are categorized into three main ex
 | 5R-Peak | 95.55% | 95.53% | 95.55% | 95.42% | 0.99 |
 | 10R-Peak | 94.62% | 94.67% | 94.62% | 94.64% | 0.98 |
 
-## Getting Started 
+## Getting Started
