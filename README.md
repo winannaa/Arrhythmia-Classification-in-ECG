@@ -98,7 +98,7 @@ pip install -r requirements.txt
 
 ### 4. Download the Dataset
 This project uses the MIT-BIH Arrhythmia Database from PhysioNet. Download the dataset from [PhysioNet](https://physionet.org/content/mitdb/1.0.0/). After downloading, place the dataset inside the project directory:
-```bash
+```text
 data/
 └── mit-bih-arrhythmia-database/
 ```
@@ -116,7 +116,29 @@ jupyter notebook
 Your browser will open a local Jupyter interface. Navigate to the repository folder and open one of the experiment notebooks. Run the cells sequentially to reproduce the experiments.
 
 ### 2. Using Visual Studio Code
-Open the repository folder in VS Code and open any `.ipynb` notebook file. Then run the notebook cells directly inside Visual Studio Code.
+Open the repository folder in VS Code and open any .ipynb notebook file. Make sure the Python and Jupyter extensions are installed. Then run the notebook cells directly inside Visual Studio Code.
+
+## Repository Structure
+```text
+Arrhythmia-Classification-in-ECG
+│
+├── data/
+│   └── mit-bih-arrhythmia-database/     # MIT-BIH ECG dataset
+│
+├── notebooks/                           # Jupyter notebooks for experiments
+│   ├── GRU_Variants_3R.ipynb
+│   ├── GRU_Variants_5R.ipynb
+│   ├── GRU_Variants_10R.ipynb
+│   ├── BiGRU_Variants_3R.ipynb
+│   ├── BiGRU_Variants_5R.ipynb
+│   └── BiGRU_Variants_10R.ipynb
+│
+├── src/                                 # Custom GRU / BiGRU implementations
+│
+├── requirements.txt                     # Python dependencies
+│
+└── README.md                            # Project documentation
+```
 
 ## Experiment Pipeline
 Each notebook follows the same experimental workflow:
