@@ -42,7 +42,6 @@ This project implements a **Dual-RNN Bidirectional pipeline from scratch**:
 * **Feature Fusion:** The learned temporal representations from both directions are cleanly merged using `tf.keras.layers.Concatenate(axis=-1)` before being passed to the dense classification layers.
 
 ### Experiments
-
 To find the most optimal model for ECG arrhythmia classification, this project employed a comprehensive **Grid Search** approach. A robust training pipeline was designed to systematically evaluate and loop through multiple combinations of data segmentation strategies, architectures, and hyperparameters.
 
 The findings from this exhaustive grid search are categorized into three main experiments:
@@ -70,3 +69,60 @@ The findings from this exhaustive grid search are categorized into three main ex
 | 10R-Peak | 94.62% | 94.67% | 94.62% | 94.64% | 0.98 |
 
 ## Getting Started
+Follow the steps below to set up the environment and reproduce the experiments in this repository.
+
+### 1. Clone the Repository
+```bash
+git clone https://github.com/winanannaa/Arrhythmia-Classification-in-ECG.git
+cd Arrhythmia-Classification-in-ECG
+```
+### 2. Create a Virtual Environment
+Creating a virtual environment helps avoid dependency conflicts.
+```bash
+python -m venv venv
+```
+Activate the environment:
+- Windows
+  ```bash
+  venv\Scripts\activate
+  ```
+- Linux / Mac
+  ```bash
+  source venv/bin/activate
+  ```
+### 3. Install Dependencies
+Install all required libraries using the provided `requirements.txt` file.
+```bash
+pip install -r requirements.txt
+```
+
+### 4. Download the Dataset
+This project uses the MIT-BIH Arrhythmia Database from PhysioNet. Download the dataset from [PhysioNet](https://physionet.org/content/mitdb/1.0.0/). After downloading, place the dataset inside the project directory:
+```bash
+data/
+└── mit-bih-arrhythmia-database/
+```
+### Running the Notebooks
+You can run the experiments using Jupyter Notebook or Visual Studio Code (VS Code).
+### 1. Using Jupyter Notebook
+Install Jupyter Notebook if it is not already installed:
+```bash
+pip install notebook
+```
+Launch Jupyter Notebook:
+```bash
+jupyter notebook
+```
+Your browser will open a local Jupyter interface. Navigate to the repository folder and open one of the experiment notebooks. Run the cells sequentially to reproduce the experiments.
+
+### 2. Using Visual Studio Code
+Open the repository folder in VS Code and open any `.ipynb` notebook file. Then run the notebook cells directly inside Visual Studio Code.
+
+## Experiment Pipeline
+Each notebook follows the same experimental workflow:
+1. Load ECG recordings from the MIT-BIH Arrhythmia Database
+2. Apply ECG preprocessing using Butterworth bandpass filtering (0.5–45 Hz) and Z-score normalization.
+3. Detect R-peaks
+4. Perform sliding window segmentation (3R, 5R, 10R)
+5. Train GRU / BiGRU models
+6. Evaluate model performance using Accuracy, Precision, Recall, F1-score, and ROC-AUC 
