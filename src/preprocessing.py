@@ -1,33 +1,16 @@
-import os
-import random
 import numpy as np
-import tensorflow as tf
 from scipy.signal import butter, filtfilt
 
-
-def set_seed(seed=42):
-    os.environ['PYTHONHASHSEED'] = str(seed)
-    random.seed(seed)
-    np.random.seed(seed)
-    tf.random.set_seed(seed)
-
-
-def bandpass_filter(signal, fs, lowcut=0.5, highcut=45.0, order=4):
-    nyquist = 0.5 * fs
-    low = lowcut / nyquist
-    high = highcut / nyquist
-
+def butter_bandpass(lowcut, highcut, fs, order=4):
+    nyq = 0.5 * fs
+    low = lowcut / nyq
+    high = highcut / nyq
     b, a = butter(order, [low, high], btype='band')
-    filtered = filtfilt(b, a, signal)
+    return b, a
 
-    return filtered
-
-
-def zscore_normalize(signal):
-    mean = np.mean(signal)
-    std = np.std(signal)
-
-    if std == 0:
-        return signal
-
-    return (signal - mean) / std
+def bandpass_filter(data, lowcut, highcut, fs, order=4):
+    b, a = butter_bandpass(lowcut, highcut, fs, order)
+    padlen = 3 * (max(len(a), len(b)) - 1)
+    if data.shape[0] <= padlen:
+        return data.copy()
+    return filtfilt(b, a, data)
