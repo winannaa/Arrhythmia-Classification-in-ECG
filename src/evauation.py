@@ -1,44 +1,55 @@
-import matplotlib.pyplot as plt
 import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.metrics import roc_curve, auc, classification_report, confusion_matrix, ConfusionMatrixDisplay
+from itertools import cycle
+import os
 
-from sklearn.metrics import (
-    confusion_matrix,
-    ConfusionMatrixDisplay,
-    classification_report,
-    roc_curve,
-    auc
-)
+def plot_roc_multiclass(y_true_enc, y_pred_probs, model_name="Model"):
+    n_classes = y_true_enc.shape[1]
+    fpr = dict(); tpr = dict(); roc_auc = dict()
 
+    for i in range(n_classes):
+        fpr[i], tpr[i], _ = roc_curve(y_true_enc[:, i], y_pred_probs[:, i])
+        roc_auc[i] = auc(fpr[i], tpr[i])
 
-def plot_confusion_matrix(y_true, y_pred, class_names):
-    cm = confusion_matrix(y_true, y_pred)
+    all_fpr = np.unique(np.concatenate([fpr[i] for i in range(n_classes)]))
+    mean_tpr = np.zeros_like(all_fpr)
+    for i in range(n_classes):
+        mean_tpr += np.interp(all_fpr, fpr[i], tpr[i])
+    mean_tpr /= n_classes
+    fpr["macro"] = all_fpr
+    tpr["macro"] = mean_tpr
+    roc_auc["macro"] = auc(fpr["macro"], tpr["macro"])
 
-    disp = ConfusionMatrixDisplay(
-        confusion_matrix=cm,
-        display_labels=class_names
-    )
-
-    disp.plot(cmap="Blues")
-    plt.title("Confusion Matrix")
+    plt.figure(figsize=(10, 6))
+    colors = cycle(['aqua', 'darkorange', 'cornflowerblue', 'green', 'red', 'purple', 'brown', 'teal'])
+    for i, color in zip(range(n_classes), colors):
+        plt.plot(fpr[i], tpr[i], color=color, lw=2, label=f"ROC class {i} (AUC = {roc_auc[i]:.2f})")
+    plt.plot(fpr["macro"], tpr["macro"], color='navy', linestyle='--', label=f'Macro-average ROC (AUC = {roc_auc["macro"]:.2f})', linewidth=3)
+    plt.plot([0, 1], [0, 1], 'k--', lw=2)
+    plt.xlabel('False Positive Rate')
+    plt.ylabel('True Positive Rate')
+    plt.title(f'ROC Curve - {model_name}')
+    plt.legend(loc='lower right')
+    plt.grid(True)
+    plt.tight_layout()
     plt.show()
 
+def plot_and_save_training_history(hist, model_name, output_dir):
+    if not hist: return
+    plt.figure(figsize=(10, 4))
+    plt.subplot(1, 2, 1)
+    plt.plot(hist['accuracy'], label='Train')
+    plt.plot(hist['val_accuracy'], label='Val')
+    plt.title(f'{model_name} - Accuracy')
+    plt.xlabel('Epoch'); plt.ylabel('Accuracy'); plt.legend()
 
-def print_classification_metrics(y_true, y_pred):
-    report = classification_report(y_true, y_pred)
-    print(report)
+    plt.subplot(1, 2, 2)
+    plt.plot(hist['loss'], label='Train')
+    plt.plot(hist['val_loss'], label='Val')
+    plt.title(f'{model_name} - Loss')
+    plt.xlabel('Epoch'); plt.ylabel('Loss'); plt.legend()
 
-
-def plot_roc_curve(y_true, y_score):
-    fpr, tpr, _ = roc_curve(y_true, y_score)
-    roc_auc = auc(fpr, tpr)
-
-    plt.figure()
-    plt.plot(fpr, tpr, label=f"ROC curve (AUC = {roc_auc:.3f})")
-    plt.plot([0, 1], [0, 1], linestyle="--")
-
-    plt.xlabel("False Positive Rate")
-    plt.ylabel("True Positive Rate")
-    plt.title("ROC Curve")
-
-    plt.legend()
-    plt.show()
+    plt.tight_layout()
+    plt.savefig(os.path.join(output_dir, f"{model_name}_acc_loss.png"))
+    plt.close()
