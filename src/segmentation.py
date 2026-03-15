@@ -40,8 +40,8 @@ def detect_r_peaks(signal, fs, method='wfdb', filtered=True):
 
 def get_sliding_windows(signal, r_peaks, fs, num_peaks=3, pre_sec=0.1, post_sec=0.2, min_sec=0.3):
     """
-    Fungsi dinamis untuk mengambil sliding windows. 
-    Ubah parameter num_peaks menjadi 3, 5, atau 10 sesuai kebutuhan (3R, 5R, 10R).
+    Dynamic function for capturing a sliding window.
+    Change the num_peaks parameter to 3, 5, or 10 as needed (3R, 5R, 10R).
     """
     windows = []
     waves = {}
