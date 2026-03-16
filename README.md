@@ -56,7 +56,7 @@ To find the optimal model for ECG arrhythmia classification, this project employ
 - **Process:** Using the locked hyperparameters, we evaluated the conventional GRU (GRU0) against four custom mathematical variants (GRU1-GRU4) and five bidirectional pipelines (BiGRU0-BiGRU4) across all variations of sliding windows.
 - **Result:** The conventional **GRU0** consistently outperformed all custom variants and bidirectional models. Below are the top 3 best-performing architectures from this evaluation:
   
-| Rank | Architecture | Accuracy | Precision | Recall | F1-Score | AUC |
+| No. | Architecture | Accuracy | Precision | Recall | F1-Score | AUC |
 | :---: | :--- | :---: | :---: | :---: | :---: | :---: |
 | **1** | **GRU0 (Conventional)** | **95.99%** | **0.9582** | **0.9599** | **0.9580** | **0.99** |
 | 2 | GRU2 (Custom Variant) | 95.78% | 0.9563 | 0.9578 | 0.9563 | 0.99 |
