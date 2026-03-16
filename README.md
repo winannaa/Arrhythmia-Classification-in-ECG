@@ -70,7 +70,16 @@ The findings from this exhaustive grid search are categorized into three main ex
 ## Final Result
 After evaluating hundreds of configurations through grid search, the **Conventional GRU (GRU0)** paired with a **3R-Peak sliding window** emerged as the ultimate best-performing model for classifying the ECG signals.
 
+![Hasil Confusion Matrix](assets/GRU0_units128_dropout20_lr0001_acc_loss.png)
+<p align="center">
+  <b>Figure 1: Training and Validation Accuracy & Loss (Conventional GRU0 - 3R Window)</b>
+</p>
 
+The learning curves above illustrate the training process of the best-performing GRU0 model. 
+- **Accuracy Curve (Left):** Both training and validation accuracy converge rapidly within the first 20 epochs, eventually stabilizing at approximately 96%.
+- **Loss Curve (Right):** The training and validation loss smoothly decrease and plateau without significant divergence.
+
+The minimal gap between the training and validation curves indicates that the model generalizes exceptionally well to unseen data without suffering from overfitting. This stability highlights the effectiveness of the chosen hyperparameters, particularly the application of a 0.2 dropout rate and the Z-score normalization technique used during the data preprocessing stage.
 
 ## Getting Started
 This project is built using Python and Jupyter Notebooks. You can run the code using your preferred environment, such as **Google Colab, local Jupyter Server, Visual Studio Code**, or any other IDE that supports `.ipynb` files.
