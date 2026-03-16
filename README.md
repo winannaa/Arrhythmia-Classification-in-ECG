@@ -71,11 +71,12 @@ The findings from this exhaustive grid search are categorized into three main ex
 | 10R-Peak | 94.62% | 94.67% | 94.62% | 94.64% | 0.98 |
 
 ## Final Result
+After evaluating multiple architectures and hyperparameters through an exhaustive grid search, the **Conventional GRU (GRU0)** paired with a **3R-Peak sliding window** emerged as the most optimal model. The winning configuration utilizes **128 units, a dropout rate of 0.2, and a learning rate of 0.001**. Below are the detailed performance visualizations and evaluation metrics of this best-performing model.
 <p align="center">
   <img src="assets/GRU0_units128_dropout20_lr0001_acc_loss.png" alt="Hasil Accuracy_Loss">
 </p>
 <p align="center">
-  <b>Figure 2: Training and Validation Accuracy & Loss (Conventional GRU0 - 3R Window)</b>
+  <b>Figure 2: Training and Validation Accuracy & Loss GRU0</b>
 </p>
 
 The learning curves above illustrate the training process of the best-performing GRU0 model. 
@@ -88,10 +89,32 @@ The minimal gap between the training and validation curves indicates that the mo
   <img src="assets/GRU0_units128_dropout20_lr0001_confusion_matrix.png" alt="Hasil Confusion Matrix">
 </p>
 <p align="center">
-  <b>Figure 3: Confusion Matrix of the Best Performing Model (Conventional GRU0 - 3R Window)</b>
+  <b>Figure 3: Confusion Matrix Conventional GRU0 - 3R Window</b>
 </p>
 
 The confusion matrix above demonstrates the robust discriminative ability of the GRU0 model across all eight arrhythmia classes. The prominent dark diagonal indicates a very high rate of True Positives, with minimal misclassifications across the board. This proves that the model successfully learns and generalizes the temporal patterns of the ECG signals, effectively distinguishing between different arrhythmias without being heavily biased towards the majority class.
+
+<p align="center">
+  <img src="assets/GRU0_ROCAUC.png" alt="ROCAUC">
+</p>
+<p align="center">
+  <b>Figure 4: ROC-AUC Conventional GRU0 - 3R Window</b>
+</p>
+
+The Receiver Operating Characteristic (ROC) curve above further validates the model's exceptional performance. Achieving a macro-average Area Under the Curve (AUC) of 0.99 indicates that the GRU0 model has a near-perfect ability to distinguish between the 8 different arrhythmia classes. The tightly clustered curves near the top-left corner demonstrate high sensitivity (True Positive Rate) while maintaining a very low False Positive Rate across all categories, proving the model's reliability in medical diagnostic scenarios.
+
+| Class | Accuracy | Precision | Recall | F1-Score | AUC |
+| :--- | :---: | :---: | :---: | :---: | :---: | 
+| **AFIB** | 0.89 | 0.94 | 0.89 | 0.91 | 0.99 |
+| **AFL** | 0.92 | 0.92 | 0.92 | 0.92 | 0.99 |
+| **B** | 0.96 | 0.93 | 0.96 | 0.95 | 1 |
+| **N** | 0.93 | 0.95 | 0.93 | 0.94 | 0.99 |
+| **NOD** | 1 | 0.94 | 1 | 0.97 | 1 |
+| **P** | 0.98 | 0.99 | 0.98 | 0.99 | 1 |
+| **SVTA** | 0.99 | 1 | 0.99 | 1 | 1 |
+| **VT** | 1 | 0.95 | 1 | 0.97 | 1 |
+
+The table above details the comprehensive evaluation metrics of the GRU0 model across each individual arrhythmia class. The model achieved exceptional results, particularly in identifying Ventricular Tachycardia (VT) and Nodal rhythms (NOD), both of which scored a perfect 1.00 in Accuracy and Recall. Similarly, the SVTA class demonstrated flawless Precision and F1-Score (1.00). Most notably, the Area Under the Curve (AUC) is outstanding across the board, achieving either 0.99 or a perfect 1.00 for all classes. Even for complex and highly irregular rhythms such as Atrial Fibrillation (AFIB), the model maintains a robust predictive capacity (0.89 Accuracy and 0.99 AUC), underscoring its high reliability and effectiveness in distinguishing complex ECG morphological patterns.
 
 ## Getting Started
 This project is built using Python and Jupyter Notebooks. You can run the code using your preferred environment, such as **Google Colab, local Jupyter Server, Visual Studio Code**, or any other IDE that supports `.ipynb` files.
