@@ -27,7 +27,6 @@ As illustrated in the system block diagram above, the project follows a structur
 5. **Evaluation** assesses the model performance using comprehensive metrics such as Accuracy, Precision, Recall, F1-Score, and ROC-AUC.
 
 ### Classification Model
-
 #### 1. GRU Variants (Custom Implementations)
 The custom GRU variants (GRU1 - GRU4) implemented in the `src/` directory are heavily adapted and optimized from the foundational concepts presented by A. Kumarsinha [3]. The conventional GRU (GRU0) is based on the original architecture introduced by Cho et al. [1].
 
@@ -45,30 +44,34 @@ This project implements a **Dual-RNN Bidirectional pipeline from scratch**:
 * **Feature Fusion:** The learned temporal representations from both directions are cleanly merged using `tf.keras.layers.Concatenate(axis=-1)` before being passed to the dense classification layers.
 
 ### Experiments
-To find the most optimal model for ECG arrhythmia classification, this project employed a comprehensive **Grid Search** approach. A robust training pipeline was designed to systematically evaluate and loop through multiple combinations of data segmentation strategies, architectures, and hyperparameters.
+To find the optimal model for ECG arrhythmia classification, this project employed an extensive **Grid Search** approach. Rather than detailing all hundreds of combinations at once, the evaluation process is broken down into a systematic elimination pipeline (Funneling Strategy) consisting of three main phases:
 
-The findings from this exhaustive grid search are categorized into three main experiments:
-#### 1. **Hyperparameter Tuning** 
-- Involved a systematic search across units (32, 64, 128), dropout rates (0.2, 0.5), and learning rates (0.001, 0.0001).
-- The best configuration was **128 units, a dropout rate of 0.2, and a learning rate of 0.001**. This configuration was retained for further experimentation.
+#### 1. Hyperparameter Tuning (Baseline Establishment)
+- **Objective:** Identify the most stable training configuration.
+- **Process:** A systematic search was conducted across different units (32, 64, 128), dropout rates (0.2, 0.5), and learning rates (0.001, 0.0001).
+- **Result:** The configuration of **128 units, a 0.2 dropout rate, and a 0.001 learning rate** yielded the best stability and accuracy. These hyperparameters were locked in for all subsequent phases.
 
-#### 2. **Architecture Comparison** 
-- Compared conventional GRU (GRU0) with four mathematical variants (GRU1-4) and five bidirectional architectures (BiGRU0-4). The results showed that conventional GRU0 emerged as the best architecture. Below is a table of the 3 best architectures.
+#### 2. Architecture Comparison (Finding the Best Network)
+- **Objective:** Determine the most effective Deep Learning architecture.
+- **Process:** Using the locked hyperparameters, we evaluated the conventional GRU (GRU0) against four custom mathematical variants (GRU1-GRU4) and five bidirectional pipelines (BiGRU0-BiGRU4) across all variations of sliding windows.
+- **Result:** The conventional **GRU0** consistently outperformed all custom variants and bidirectional models. Below are the top 3 best-performing architectures from this evaluation:
   
-| No. | Architecture | Accuracy | Precision | Recall | F1-Score | AUC |
+| Rank | Architecture | Accuracy | Precision | Recall | F1-Score | AUC |
 | :---: | :--- | :---: | :---: | :---: | :---: | :---: |
-| 1 | **GRU0 (Conventional)** | **95.99%** | **95.82%** | **95.99%** | **95.80%** | **0.99** |
-| 2 | GRU2 (Variant) | 95.78% | 95.63% | 95.78% | 95.63% | 0.99 |
-| 3 | BiGRU0 (Bidirectional)| 95.73% | 95.66% | 95.73% | 95.61% | 0.99 |
+| **1** | **GRU0 (Conventional)** | **95.99%** | **0.9582** | **0.9599** | **0.9580** | **0.99** |
+| 2 | GRU2 (Custom Variant) | 95.78% | 0.9563 | 0.9578 | 0.9563 | 0.99 |
+| 3 | BiGRU0 (Bidirectional)| 95.73% | 0.9566 | 0.9573 | 0.9561 | 0.99 |
 
-#### 3. **Sliding Window Variation** 
-- Analyzed the effect of different segmentation lengths based on R-peak counts (3R, 5R, and 10R windows) on the winning architecture. The following are the performance results of the three segmentation lengths.
+#### 3. Sliding Window Variation (Finding the Optimal Sequence Length)
+- **Objective:** Understand the effect of sequence length (temporal context) on the model's predictive power.
+- **Process:** The winning architecture (**GRU0**) with the locked hyperparameters was evaluated individually across three different temporal contexts: 3R, 5R, and 10R-peak windows.
+- **Result:** The shortest window (**3R-Peak**) provided the most optimal balance of temporal information and noise reduction, resulting in the highest overall metrics.
 
 | Window Size | Accuracy | Precision | Recall | F1-Score | AUC |
 | :--- | :---: | :---: | :---: | :---: | :---: |
-| **3R-Peak** | **95.99%** | **95.82%** | **95.99%** | **95.80%** | **0.99** |
-| 5R-Peak | 95.55% | 95.53% | 95.55% | 95.42% | 0.99 |
-| 10R-Peak | 94.62% | 94.67% | 94.62% | 94.64% | 0.98 |
+| **3R-Peak** | **95.99%** | **0.9582** | **0.9599** | **0.9580** | **0.99** |
+| 5R-Peak | 95.55% | 0.9553 | 0.9555 | 0.9542 | 0.99 |
+| 10R-Peak | 94.62% | 0.9467 | 0.9462 | 0.9464 | 0.98 |
 
 ## Final Result
 After evaluating multiple architectures and hyperparameters through an exhaustive grid search, the **Conventional GRU (GRU0)** paired with a **3R-Peak sliding window** emerged as the most optimal model. The winning configuration utilizes **128 units, a dropout rate of 0.2, and a learning rate of 0.001**. Below are the detailed performance visualizations and evaluation metrics of this best-performing model.
@@ -134,10 +137,10 @@ If you are using Google Colab, you can run the command above directly in a noteb
 ### 2. Dataset Setup
 This project uses the MIT-BIH Arrhythmia Database.
 1.  Download the dataset from [PhysioNet](https://physionet.org/content/mitdb/1.0.0/).
-2.  Extract the files and place them inside the data/mit-bih-arrhythmia-database/ directory.
+2.  Extract the files and place them inside the `data/mit-bih-arrhythmia-database/` directory.
 
 ### 3. Running the Pipeline
 To reproduce the experiments, you must execute the notebooks in the following order:
 - Run `notebooks/EDA_and_Data_Preparation.ipynb` first. It will extract the raw ECG signals, apply bandpass filters, segment the windows, and save the processed data as      `.pkl` files. Remember to adjust the `SAVE_PATH` variable inside the notebook to match your local directory or Google Drive path.
-- Once the .pkl files are generated, you can run `notebooks/GRU_Experiments.ipynb` & `notebooks/BiGRU_Experiments.ipynb` independently. They will automatically load the      preprocessed data, train the models, and visualize the evaluation metrics (Accuracy, ROC-AUC, Confusion Matrix, etc.).
+- Once the `.pkl` files are generated, you can run `notebooks/GRU_Experiments.ipynb` & `notebooks/BiGRU_Experiments.ipynb` independently. They will automatically load the      preprocessed data, train the models, and visualize the evaluation metrics (Accuracy, ROC-AUC, Confusion Matrix, etc.).
 
