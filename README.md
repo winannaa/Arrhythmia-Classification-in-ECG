@@ -1,6 +1,5 @@
 # Arrhythmia Classification in ECG Signals Using GRU and BiGRU
-
-This repository contains my undergraduate thesis project in Biomedical Engineering. It implements a Deep Learning approach to automatically classify cardiac arrhythmias from Electrocardiogram (ECG) signals. Utilizing the MIT-BIH Arrhythmia Database, the project evaluates the effectiveness of Gated Recurrent Unit (GRU) and Bidirectional GRU (BiGRU) architectures, combined with R-peak-based sliding window segmentation and hyperparameter tuning.
+This repository contains my undergraduate thesis project in Biomedical Engineering. It implements a Deep Learning approach to automatically classify cardiac arrhythmias from Electrocardiogram (ECG) signals. Utilizing the MIT-BIH Arrhythmia Database, the project evaluates the effectiveness of Gated Recurrent Unit (GRU) [1] and Bidirectional GRU (BiGRU) architectures, combined with R-peak-based sliding window segmentation [2] and hyperparameter tuning.
 
 ## What this project does
 This system processes raw ECG signals and classifies them into eight distinct cardiac rhythms:
@@ -17,16 +16,17 @@ The block diagram below illustrates the end-to-end pipeline developed for this a
 
 <img width="1966" height="576" alt="Diagram Alir Aktivitas Penelitian-Diagram Blok Desain Sistem drawio (1)" src="https://github.com/user-attachments/assets/2bd94a13-07e6-4a92-9488-b2e4372b25d5" />
 
-As illustrated in the system block diagram above, the project follows a structured workflow.
+As illustrated in the system block diagram above, the project follows a structured workflow:
 1. **Data Preparation & EDA** involves extracting the MIT-BIH Arrhythmia Database and performing Exploratory Data Analysis to understand the signal characteristics and class distributions.
 2. **Data Pre-Processing** cleans the continuous ECG signals using a 4th-order Butterworth bandpass filter (0.5 - 45 Hz) to remove baseline wander and high-frequency noise, followed by Z-score normalization per window.
-3. **Sliding Window** segments the long signals into fixed-length segments based on R-peak counts (3R, 5R, and 10R-peak windows) to capture dynamic temporal features.
+3. **Sliding Window** segments the long signals into fixed-length segments based on R-peak counts (3R, 5R, and 10R-peak windows) to capture dynamic temporal features [2].
 4. **Classification Model** feeds the processed segments into two main Deep Learning architectures for comparison, namely GRU Variants (GRU0-GRU4) and Bidirectional GRU (BiGRU0-BiGRU4).
 5. **Evaluation** assesses the model performance using comprehensive metrics such as Accuracy, Precision, Recall, F1-Score, and ROC-AUC.
 
 ### Classification Model
+
 #### 1. GRU Variants (Custom Implementations)
-The custom GRU variants (GRU1 - GRU4) implemented in the `src/` directory are heavily adapted and optimized from the foundational concepts presented by [A. Kumarsinha](https://github.com/abhaskumarsinha/GRU-varients).
+The custom GRU variants (GRU1 - GRU4) implemented in the `src/` directory are heavily adapted and optimized from the foundational concepts presented by A. Kumarsinha [3]. The conventional GRU (GRU0) is based on the original architecture introduced by Cho et al. [1].
 
 To make these raw architectures suitable for robust training on complex physiological time-series data (ECG) and fully compatible with the modern TensorFlow/Keras ecosystem, several major engineering improvements were applied to the original implementations:
 
@@ -45,7 +45,6 @@ This project implements a **Dual-RNN Bidirectional pipeline from scratch**:
 To find the most optimal model for ECG arrhythmia classification, this project employed a comprehensive **Grid Search** approach. A robust training pipeline was designed to systematically evaluate and loop through multiple combinations of data segmentation strategies, architectures, and hyperparameters.
 
 The findings from this exhaustive grid search are categorized into three main experiments:
-
 #### 1. **Hyperparameter Tuning** 
 - Involved a systematic search across units (32, 64, 128), dropout rates (0.2, 0.5), and learning rates (0.001, 0.0001).
 - The best configuration was **128 units, a dropout rate of 0.2, and a learning rate of 0.001**. This configuration was retained for further experimentation.
@@ -68,83 +67,33 @@ The findings from this exhaustive grid search are categorized into three main ex
 | 5R-Peak | 95.55% | 95.53% | 95.55% | 95.42% | 0.99 |
 | 10R-Peak | 94.62% | 94.67% | 94.62% | 94.64% | 0.98 |
 
-## Getting Started
-Follow the steps below to set up the environment and reproduce the experiments in this repository.
+## Final Result
+After evaluating hundreds of configurations through grid search, the **Conventional GRU (GRU0)** paired with a **3R-Peak sliding window** emerged as the ultimate best-performing model for classifying the ECG signals.
 
-### 1. Clone the Repository
+
+
+## Getting Started
+This project is built using Python and Jupyter Notebooks. You can run the code using your preferred environment, such as **Google Colab, local Jupyter Server, Visual Studio Code**, or any other IDE that supports `.ipynb` files.
+
+### 1. Requirements
+Clone the repository and install the required dependencies. (If you are using Google Colab, you can install the requirements directly in a notebook cell).
 ```bash
 git clone https://github.com/winanannaa/Arrhythmia-Classification-in-ECG.git
 cd Arrhythmia-Classification-in-ECG
 ```
-### 2. Create a Virtual Environment
-Creating a virtual environment helps avoid dependency conflicts.
-```bash
-python -m venv venv
-```
-Activate the environment:
-- Windows
-  ```bash
-  venv\Scripts\activate
-  ```
-- Linux / Mac
-  ```bash
-  source venv/bin/activate
-  ```
-### 3. Install Dependencies
-Install all required libraries using the provided `requirements.txt` file.
+Install all required Python packages.
 ```bash
 pip install -r requirements.txt
 ```
+If you are using Google Colab, you can run the command above directly in a notebook cell. 
 
-### 4. Download the Dataset
-This project uses the MIT-BIH Arrhythmia Database from PhysioNet. Download the dataset from [PhysioNet](https://physionet.org/content/mitdb/1.0.0/). After downloading, place the dataset inside the project directory:
-```text
-data/
-└── mit-bih-arrhythmia-database/
-```
-### Running the Notebooks
-You can run the experiments using Jupyter Notebook or Visual Studio Code (VS Code).
-### 1. Using Jupyter Notebook
-Install Jupyter Notebook if it is not already installed:
-```bash
-pip install notebook
-```
-Launch Jupyter Notebook:
-```bash
-jupyter notebook
-```
-Your browser will open a local Jupyter interface. Navigate to the repository folder and open one of the experiment notebooks. Run the cells sequentially to reproduce the experiments.
+### 2. Dataset Setup
+This project uses the MIT-BIH Arrhythmia Database.
+1.  Download the dataset from [PhysioNet](https://physionet.org/content/mitdb/1.0.0/).
+2.  Extract the files and place them inside the data/mit-bih-arrhythmia-database/ directory.
 
-### 2. Using Visual Studio Code
-Open the repository folder in VS Code and open any .ipynb notebook file. Make sure the Python and Jupyter extensions are installed. Then run the notebook cells directly inside Visual Studio Code.
+### 3. Running the Pipeline
+To reproduce the experiments, you must execute the notebooks in the following order:
+- Run `notebooks/EDA_and_Data_Preparation.ipynb` first. It will extract the raw ECG signals, apply bandpass filters, segment the windows, and save the processed data as      `.pkl` files. Remember to adjust the `SAVE_PATH` variable inside the notebook to match your local directory or Google Drive path.
+- Once the .pkl files are generated, you can run `notebooks/GRU_Experiments.ipynb` & `notebooks/BiGRU_Experiments.ipynb` independently. They will automatically load the      preprocessed data, train the models, and visualize the evaluation metrics (Accuracy, ROC-AUC, Confusion Matrix, etc.).
 
-## Repository Structure
-```text
-Arrhythmia-Classification-in-ECG
-│
-├── data/
-│   └── mit-bih-arrhythmia-database/     # MIT-BIH ECG dataset
-│
-├── notebooks/                           # Jupyter notebooks for experiments
-│   ├── GRU_Variants_3R.ipynb
-│   ├── GRU_Variants_5R.ipynb
-│   ├── GRU_Variants_10R.ipynb
-│   ├── BiGRU_Variants_3R.ipynb
-│   ├── BiGRU_Variants_5R.ipynb
-│   └── BiGRU_Variants_10R.ipynb
-│
-├── src/                                 # Custom GRU / BiGRU implementations
-│
-├── requirements.txt                     # Python dependencies
-│
-└── README.md                            # Project documentation
-```
-
-## Experiment Pipeline
-Each notebook follows the same experimental workflow:
-1. Load ECG recordings from the MIT-BIH Arrhythmia Database
-2. Apply ECG preprocessing using Butterworth bandpass filtering (0.5–45 Hz) and Z-score normalization.
-3. Detect R-peaks
-4. Perform sliding window segmentation (3R, 5R, 10R)
-5. Train GRU / BiGRU models
-6. Evaluate model performance using Accuracy, Precision, Recall, F1-score, and ROC-AUC 
