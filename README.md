@@ -15,6 +15,9 @@ This system processes raw ECG signals and classifies them into eight distinct ca
 The block diagram below illustrates the end-to-end pipeline developed for this arrhythmia classification using the MIT-BIH Arrhythmia Database.
 
 <img width="1966" height="576" alt="Diagram Alir Aktivitas Penelitian-Diagram Blok Desain Sistem drawio (1)" src="https://github.com/user-attachments/assets/2bd94a13-07e6-4a92-9488-b2e4372b25d5" />
+<p align="center">
+  <b>Figure 1: Project Block Diagram</b>
+</p>
 
 As illustrated in the system block diagram above, the project follows a structured workflow:
 1. **Data Preparation & EDA** involves extracting the MIT-BIH Arrhythmia Database and performing Exploratory Data Analysis to understand the signal characteristics and class distributions.
@@ -68,11 +71,11 @@ The findings from this exhaustive grid search are categorized into three main ex
 | 10R-Peak | 94.62% | 94.67% | 94.62% | 94.64% | 0.98 |
 
 ## Final Result
-After evaluating hundreds of configurations through grid search, the **Conventional GRU (GRU0)** paired with a **3R-Peak sliding window** emerged as the ultimate best-performing model for classifying the ECG signals.
-
-![Hasil Confusion Matrix](assets/GRU0_units128_dropout20_lr0001_acc_loss.png)
 <p align="center">
-  <b>Figure 1: Training and Validation Accuracy & Loss (Conventional GRU0 - 3R Window)</b>
+  <img src="assets/GRU0_units128_dropout20_lr0001_acc_loss.png" alt="Hasil Accuracy_Loss">
+</p>
+<p align="center">
+  <b>Figure 2: Training and Validation Accuracy & Loss (Conventional GRU0 - 3R Window)</b>
 </p>
 
 The learning curves above illustrate the training process of the best-performing GRU0 model. 
@@ -80,6 +83,15 @@ The learning curves above illustrate the training process of the best-performing
 - **Loss Curve (Right):** The training and validation loss smoothly decrease and plateau without significant divergence.
 
 The minimal gap between the training and validation curves indicates that the model generalizes exceptionally well to unseen data without suffering from overfitting. This stability highlights the effectiveness of the chosen hyperparameters, particularly the application of a 0.2 dropout rate and the Z-score normalization technique used during the data preprocessing stage.
+
+<p align="center">
+  <img src="assets/GRU0_units128_dropout20_lr0001_confusion_matrix.png" alt="Hasil Confusion Matrix">
+</p>
+<p align="center">
+  <b>Figure 3: Confusion Matrix of the Best Performing Model (Conventional GRU0 - 3R Window)</b>
+</p>
+
+The confusion matrix above demonstrates the robust discriminative ability of the GRU0 model across all eight arrhythmia classes. The prominent dark diagonal indicates a very high rate of True Positives, with minimal misclassifications across the board. This proves that the model successfully learns and generalizes the temporal patterns of the ECG signals, effectively distinguishing between different arrhythmias without being heavily biased towards the majority class.
 
 ## Getting Started
 This project is built using Python and Jupyter Notebooks. You can run the code using your preferred environment, such as **Google Colab, local Jupyter Server, Visual Studio Code**, or any other IDE that supports `.ipynb` files.
