@@ -144,3 +144,7 @@ To reproduce the experiments, you must execute the notebooks in the following or
 - Run `notebooks/EDA_and_Data_Preparation.ipynb` first. It will extract the raw ECG signals, apply bandpass filters, segment the windows, and save the processed data as      `.pkl` files. Remember to adjust the `SAVE_PATH` variable inside the notebook to match your local directory or Google Drive path.
 - Once the `.pkl` files are generated, you can run `notebooks/GRU_Experiments.ipynb` & `notebooks/BiGRU_Experiments.ipynb` independently. They will automatically load the      preprocessed data, train the models, and visualize the evaluation metrics (Accuracy, ROC-AUC, Confusion Matrix, etc.).
 
+## References
+[1] K. Cho *et al.*, "Learning phrase representations using RNN encoder-decoder for statistical machine translation," in *EMNLP 2014 - 2014 Conference on Empirical Methods in Natural Language Processing*, 2014, pp. 1724-1734.  
+[2] S. Mandala *et al.*, "An improved method to detect arrhythmia using ensemble learning-based model in multi lead electrocardiogram (ECG)," *PLOS One*, vol. 19, Apr. 2024.  
+[3] A. Kumarsinha, "GRU Variants Comparing 5 different implementations of Gated Recurrent Units (GRU) in Keras/TensorFlow."
